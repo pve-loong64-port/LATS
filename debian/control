@@ -1,0 +1,54 @@
+Source: lats
+Section: utils
+Priority: optional
+Maintainer: Proxmox VE Loong64 <wukaiyang@loongfans.cn>
+Build-Depends:
+ debhelper-compat (= 13),
+ meson,
+ ninja-build,
+ pkg-config,
+ python3,
+ python3-venv,
+ python3-pip,
+ python3-setuptools,
+ libaio-dev,
+ libcurl4-gnutls-dev,
+ libepoxy-dev,
+ libfuse3-dev,
+ libglib2.0-dev,
+ libiscsi-dev,
+ libnuma-dev,
+ libpci-dev,
+ libpixman-1-dev,
+ libpng-dev,
+ libpulse-dev,
+ librbd-dev,
+ libseccomp-dev,
+ libspice-protocol-dev,
+ libspice-server-dev,
+ libsdl2-dev,
+ libslirp-dev,
+ libsndio-dev,
+ libusb-1.0-0-dev,
+ liburing-dev,
+ libusbredirparser-dev,
+ libusb-1.0-0-dev,
+ libvirglrenderer-dev,
+ libxkbcommon-dev,
+ libzstd-dev,
+ zlib1g-dev,
+ libfdt-dev
+Standards-Version: 4.7.0
+Homepage: https://github.com/lat-opensource/lats
+
+Package: lats
+Architecture: loong64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: System-mode x86 architecture emulator for LoongArch
+ LATS (LoongArch Architecture Translator System) is a high-performance
+ system-mode binary translator for the LoongArch architecture. It can run
+ 64-bit x86 operating systems on LoongArch hosts, and further supports
+ 32-bit and 64-bit x86 applications within the guest.
+ .
+ It is based on QEMU 8.1.5 with deep optimizations for the LoongArch
+ architecture (LATX translation engine, HAMT, RAS and other optimizations).

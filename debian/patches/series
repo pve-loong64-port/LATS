@@ -1,0 +1,4 @@
+0001-PVE-Add-dummy-id-command-line-parameter.patch
+0002-PVE-Allow-version-code-in-machine-type.patch
+0003-SAUCE-LATS-fix-avoid-race-condition-in-the-aot-merge.patch
+0004-DEBIAN-fix-compilation-with-shell-special-characters.patch

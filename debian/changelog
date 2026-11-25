@@ -1,0 +1,5 @@
+lats (0~git20261126.16162d7-1) trixie; urgency=medium
+
+  * Debian packaging for LATS built from git commit 67e49a7.
+
+ -- Proxmox VE Loong64 <wukaiyang@loongfans.cn>  Wed, 25 Nov 2026 08:14:58 +0100

@@ -1,0 +1,66 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+CONFIGURE_FLAGS = \
+	--target-list=x86_64-softmmu \
+	--disable-werror \
+	--disable-docs \
+	--disable-plugins \
+	--disable-tools \
+	--disable-capstone \
+	--disable-gtk \
+	--disable-guest-agent \
+	--disable-guest-agent-msi \
+	--disable-libnfs \
+	--disable-sdl \
+	--disable-smartcard \
+	--disable-strip \
+	--disable-xen \
+	--enable-latx-opt \
+	--enable-latx-opt-nofp \
+	--enable-latx-opt-eflags \
+	--enable-latx-opt-tu \
+	--enable-latx-opt-bql \
+	--enable-latx-opt-mmio-lockless \
+	--enable-latx-hack-mem \
+	--enable-atomic \
+	--enable-curl \
+	--enable-fuse \
+	--enable-gnutls \
+	--enable-spice \
+	--enable-slirp \
+	--enable-libusb \
+	--enable-libiscsi \
+	--enable-linux-aio \
+	--enable-linux-io-uring \
+	--enable-numa \
+	--enable-opengl \
+	--enable-pa \
+	--enable-png \
+	--enable-rbd \
+	--enable-sndio \
+	--enable-usb-redir \
+	--enable-virglrenderer \
+	--enable-virtfs \
+	--enable-xkbcommon \
+	--enable-zstd \
+	--enable-seccomp \
+	--enable-latx-ndebug \
+	--prefix=/usr \
+	--with-suffix=lats
+
+override_dh_auto_configure:
+	./configure $(CONFIGURE_FLAGS)
+
+override_dh_auto_build:
+	ninja -C build -v
+
+override_dh_install:
+	rm -rfv debian/lats/usr/share/applications
+	rm -rfv debian/lats/usr/share/icons
+	dh_install
+
+override_dh_auto_clean:
+	rm -rf build

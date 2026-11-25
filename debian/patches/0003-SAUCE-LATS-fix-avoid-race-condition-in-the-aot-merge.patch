@@ -1,0 +1,40 @@
+From: Kaiyang Wu <wukaiyang@loongfans.cn>
+Date: Wed, 25 Nov 2026 11:01:20 +0100
+Subject: [PATCH] SAUCE: LATS,
+ fix: avoid race condition in the aot merger thread
+
+Signed-off-by: Kaiyang Wu <wukaiyang@loongfans.cn>
+---
+ target/i386/latx/sbt/sys-aot-save.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/target/i386/latx/sbt/sys-aot-save.c b/target/i386/latx/sbt/sys-aot-save.c
+index c0786cd..bd1f430 100644
+--- a/target/i386/latx/sbt/sys-aot-save.c
++++ b/target/i386/latx/sbt/sys-aot-save.c
+@@ -2581,10 +2581,24 @@ static void aot_schedule_merge_work(void *opaque)
+ void aot_request_tu_merge(bool merge)
+ {
+ #ifdef CONFIG_SOFTMMU
++    AioContext *ctx;
++
++    /*
++     * aot_init() runs before qemu_init_main_loop(), so the main-loop
++     * AioContext does not exist yet during early startup. Scheduling a
++     * bottom half on a NULL context crashes in aio_bh_enqueue(). The
++     * merger thread retries and the request is re-issued once the guest
++     * runs, so dropping it here is safe.
++     */
++    ctx = qemu_get_aio_context();
++    if (!ctx) {
++        return;
++    }
++
+     /* Do not wait for BQL: shutdown may join the merger while holding it. */
+     if (!qatomic_read(&aot_merge_shutting_down) &&
+         !qatomic_xchg(&aot_merge_work_queued, 1)) {
+-        aio_bh_schedule_oneshot(qemu_get_aio_context(), aot_schedule_merge_work,
++        aio_bh_schedule_oneshot(ctx, aot_schedule_merge_work,
+                                 GINT_TO_POINTER(merge));
+     }
+ #else
